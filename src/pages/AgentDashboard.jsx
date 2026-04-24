@@ -89,6 +89,35 @@ export default function AgentDashboard() {
     feedRef.current?.scrollTo({ top: feedRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
+  const AGENT_PASSWORD = "your-secret-password";
+
+export default function AgentDashboard() {
+  const [unlocked, setUnlocked] = useState(false);
+  const [input, setInput] = useState("");
+
+  if (!unlocked) {
+    return (
+      <div style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", height:"100vh", background:"#0f0f0f", gap:16 }}>
+        <h2 style={{ color:"#f1f1f1" }}>Agent Access</h2>
+        <input
+          type="password"
+          placeholder="Enter password"
+          value={input}
+          onChange={e => setInput(e.target.value)}
+          style={{ padding:"10px 16px", borderRadius:8, border:"1px solid #333", background:"#1a1a1a", color:"#f1f1f1", fontSize:14 }}
+        />
+        <button
+          onClick={() => { if (input === AGENT_PASSWORD) setUnlocked(true); }}
+          style={{ background:"#FF0000", color:"white", border:"none", padding:"10px 24px", borderRadius:8, cursor:"pointer", fontSize:14 }}
+        >
+          Enter
+        </button>
+      </div>
+    );
+  }
+
+  // rest of your dashboard...
+}
   // ── Send reply ──────────────────────────────────────────────────
   const handleSend = useCallback(async () => {
     const text = input.trim();
