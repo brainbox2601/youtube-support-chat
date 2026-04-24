@@ -107,6 +107,7 @@ export default function AgentDashboard() {
         text,
         senderId:   AGENT_UID,
         senderType: "agent",
+        senderName: "Support Agent",
       });
     } catch (err) {
       console.error("Send failed:", err);
