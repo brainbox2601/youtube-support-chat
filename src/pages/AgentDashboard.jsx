@@ -278,7 +278,7 @@ export default function AgentDashboard() {
                 <div style={{ flex:1, minWidth:0 }}>
                   <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:3 }}>
                     <span style={{ fontSize:13, fontWeight: chat.unread > 0 ? 700 : 500, color:"#f1f1f1" }}>
-                      Customer {(chat.customerId || "").slice(-6)}
+                      {chat.displayName || `Customer ${(chat.customerId || "").slice(-6)}`}
                     </span>
                     <span style={{ fontSize:10, color:"#555", flexShrink:0 }}>{chat.lastMessageAt}</span>
                   </div>
