@@ -17,7 +17,7 @@ export default function App() {
         <Route path="/chat"  element={<CustomerChat />} />
 
         {/* Agent dashboard — only you access this */}
-        <Route path="/agent" element={<AgentDashboard />} />
+        <Route path="/agent-x7k92p" element={<AgentDashboard />} />
 
         {/* Default: redirect to customer chat */}
         <Route path="*" element={<Navigate to="/chat" replace />} />
