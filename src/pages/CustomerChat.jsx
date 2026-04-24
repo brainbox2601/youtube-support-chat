@@ -316,7 +316,7 @@ export default function CustomerChat() {
             const prevSame = i > 0 && messages[i-1].senderType === msg.senderType;
             return (
               <div key={msg.id} className={i >= messages.length - 2 ? "msg-new" : ""}>
-                <MessageBubble msg={msg} isAgent={isAgent} avatarUrl={AGENT_AVATAR} senderName="YouTube Support" showAvatar={!prevSame} showName={!prevSame && isAgent} theme="light"/>
+                <MessageBubble msg={msg} isAgent={isAgent} avatarUrl={AGENT_AVATAR} senderName={msg.senderName || "YouTube Support"} showAvatar={!prevSame} showName={!prevSame && isAgent} theme="light"/>
               </div>
             );
           })}
