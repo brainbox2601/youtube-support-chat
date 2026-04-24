@@ -116,6 +116,7 @@ export const sendMessage = async ({
   text,
   senderId,
   senderType = "customer",
+  senderName = "",
   type       = "text",
 }) => {
  if (!text.trim()) return;
@@ -130,6 +131,7 @@ if (senderType === "customer") {
     text:       text.trim(),
     senderId,
     senderType,
+    senderName,
     type,
     timestamp:  serverTimestamp(),
     read:       false,
