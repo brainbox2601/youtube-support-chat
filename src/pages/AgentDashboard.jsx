@@ -14,6 +14,7 @@ import {
 } from "../firebase";
 import MessageBubble   from "../components/MessageBubble";
 import TypingIndicator from "../components/TypingIndicator";
+import { renameCustomer } from "../firebase";
 
 const AGENT_AVATAR = "https://i.pravatar.cc/100?img=8";
 const AGENT_UID    = "AGENT"; // Fixed ID for the agent
@@ -43,6 +44,8 @@ export default function AgentDashboard() {
   const [filter, setFilter]             = useState("all");
   const [showChatMenu, setShowChatMenu] = useState(false);
   const [sending, setSending]           = useState(false);
+  const [editingName, setEditingName] = useState(false);
+  const [nameInput, setNameInput]     = useState("");
 
   const feedRef   = useRef(null);
   const inputRef  = useRef(null);
@@ -116,7 +119,16 @@ export default function AgentDashboard() {
   const handleKey = (e) => {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); }
   };
-
+   const handleRename = async () => {
+  if (!nameInput.trim() || !activeChat) return;
+  await renameCustomer(activeChat.id, nameInput.trim());
+  setChats(prev => prev.map(c =>
+    c.id === activeChat.id ? { ...c, displayName: nameInput.trim() } : c
+  ));
+  setActiveChat(prev => ({ ...prev, displayName: nameInput.trim() }));
+  setEditingName(false);
+  setNameInput("");
+};
   // ── Close/resolve a chat ────────────────────────────────────────
   const handleCloseChat = async (chatId) => {
     await closeChat(chatId);
@@ -304,7 +316,28 @@ export default function AgentDashboard() {
               </div>
 
               <div style={{ flex:1, minWidth:0 }}>
-                <div style={{ fontSize:13, fontWeight:600 }}>Customer {(activeChat.customerId || "").slice(-6)}</div>
+                {editingName ? (
+  <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+    <input autoFocus value={nameInput}
+      onChange={e => setNameInput(e.target.value)}
+      onKeyDown={e => { if (e.key === "Enter") handleRename(); if (e.key === "Escape") setEditingName(false); }}
+      placeholder="Enter customer name..."
+      style={{ background:"#2a2a2a", border:"1px solid #FF0000", borderRadius:6, padding:"4px 8px", color:"#f1f1f1", fontSize:13, fontFamily:"'Roboto',sans-serif", outline:"none" }}
+    />
+    <button onClick={handleRename} style={{ background:"#FF0000", border:"none", borderRadius:6, padding:"4px 10px", color:"#fff", fontSize:12, fontWeight:600, cursor:"pointer" }}>Save</button>
+    <button onClick={() => setEditingName(false)} style={{ background:"transparent", border:"none", color:"#555", cursor:"pointer", fontSize:18 }}>✕</button>
+  </div>
+) : (
+  <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+    <span style={{ fontSize:13, fontWeight:600, color:"#f1f1f1" }}>
+      {activeChat.displayName || `Customer ${(activeChat.customerId || "").slice(-6)}`}
+    </span>
+    <button onClick={() => { setEditingName(true); setNameInput(activeChat.displayName || ""); }}
+      style={{ background:"transparent", border:"none", cursor:"pointer", color:"#555", padding:2 }}>
+      ✏️
+    </button>
+  </div>
+)}
                 <span style={{ fontSize:11, color: activeChat.status === "active" ? "#00c853" : "#555" }}>
                   {activeChat.status === "active" ? "● Active" : "● Closed"}
                 </span>
