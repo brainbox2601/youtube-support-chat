@@ -196,3 +196,10 @@ export const closeChat = async (chatId) => {
   const chatRef = doc(db, "chats", chatId);
   await updateDoc(chatRef, { status: "closed" });
 };
+
+
+// ── 9. Rename a customer (agent only) ────────────────────────────
+export const renameCustomer = async (chatId, displayName) => {
+  const chatRef = doc(db, "chats", chatId);
+  await updateDoc(chatRef, { displayName: displayName.trim() });
+};
